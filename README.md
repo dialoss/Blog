@@ -27,7 +27,10 @@
 ## Screenshots
 <p float="left" align="middle">
   <img src="https://raw.githubusercontent.com/dialoss/MyMountMT/master/public/preview/preview.png" width=50%>
-<img src="https://raw.githubusercontent.com/dialoss/MyMountMT/master/preview.png" width=50%>
+  <img src="https://raw.githubusercontent.com/dialoss/MyMountMT/master/public/preview/messenger.png" width=50%>
+    <img src="https://raw.githubusercontent.com/dialoss/MyMountMT/master/public/preview/msg2.png" width=50%>
+
+
 </p>
 
 
