@@ -44,8 +44,8 @@ class ItemSerializer extends FormSerializer {
         }
         return {
             ...this.form.item,
+            ...this.fields,
             data: {...this.fields},
-            style: {},
         };
     }
 }
@@ -55,7 +55,10 @@ class PageSerializer extends FormSerializer {
         super(...args);
     }
     serialize() {
-        return this.fields as IPage;
+        return {
+            ...this.form.item,
+            ...this.fields
+        };
     }
 }
 
@@ -63,7 +66,6 @@ function getFieldData(field: string, item: ItemElement | IPage) {
     let flatItem = {
         ...item,
         ...item.data,
-        ...item.style,
     }
     if (field === 'url') {
         if (!['video', 'image', 'model', 'file'].includes(flatItem.type)) return [];
@@ -151,6 +153,7 @@ export function getFormData(method: "POST" | 'PATCH', item: ItemElement, extraFi
             let data: IPage | ItemElement = {type};
             if (type === "page") data = new PageSerializer(form, fields).serialize();
             else data = new ItemSerializer(form, fields).serialize();
+            console.log(data)
             window.actions.request(form.method, data, type === 'page' ? "pages" : "items");
         },
         windowButton: true,

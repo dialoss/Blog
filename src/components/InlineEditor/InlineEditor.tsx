@@ -34,7 +34,7 @@ const InlineEditor = ({data, closeCallback}) => {
         });
         ref.current.focus();
         if (data.config === 'editor') {
-            ref.current.editor.container.closest(".quill").querySelector('.ql-toolbar').classList.add('transform-origin');
+            ref.current.editor.container.addEventListener("mousedown", e => e.stopPropagation());
             let block = ref.current.editor.container.closest('.quill');
             let item = block.closest('.transform-item');
             if (item) item.style.width = Math.max(300, item.clientWidth) + "px";
@@ -42,8 +42,8 @@ const InlineEditor = ({data, closeCallback}) => {
     }, []);
     useLayoutEffect(() => {
         if (!ref.current) return;
-        let cont = ref.current.editor.container.closest(".transform-container");
-        triggerEvent("container:init", {container: cont});
+        let cont = ref.current.editor.container.closest(".transform-item");
+        window.actions.elements.initContainer(cont);
     }, [value]);
     return (
         <TextEditor ref={ref}

@@ -4,6 +4,13 @@ $color-focused: #495CEF;
 .transform-item {
     transform: scale(1);
 
+    background-color: #fff;
+    aspect-ratio: auto;
+    box-shadow: 0 0 3px grey;
+    z-index: 1;
+    border-radius: 8px;
+    padding: 0;
+
     &.copied {
         opacity: 0.8;
     }
@@ -13,7 +20,7 @@ $color-focused: #495CEF;
     }
 
     &.focused {
-        z-index: 5 !important;
+        z-index: 5;
     }
 
     &.edit {
@@ -28,11 +35,16 @@ $color-focused: #495CEF;
         > .item__edit {
             display: none;
         }
-        border-radius: 8px !important;
+        border-radius: 8px;
+    }
+
+    &[data-type="section"] {
+        border-radius: 0;
+        box-shadow: none;
     }
 
     &[data-style="fullscreen"], &[data-type="section"] {
-        width: 100% !important;
+        width: 100%;
     }
 
     .item__edit {
@@ -168,4 +180,3 @@ $color-focused: #495CEF;
         }
     }
 }
-

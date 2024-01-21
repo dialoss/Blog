@@ -11,9 +11,6 @@ import {createRoom, setCurrentRoom, updateRoom, updateUser} from "../api/firebas
 import {getViewportSize} from "../../../ui/helpers/viewport";
 import Swipes from "../../../ui/Swipes/Swipes";
 import AccordionContainer from "../../../ui/Accordion/AccordionContainer";
-import {actions} from "../store/reducers";
-import store from "../../../store";
-import {loginForm} from "../../../modules/Authorization/forms/loginForm";
 import {adminEmail} from "../api/config";
 import {SearchContainer} from "../../../ui/Tools/Tools";
 import {useAppSelector} from "../../../hooks/redux";

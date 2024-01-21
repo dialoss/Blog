@@ -60,14 +60,16 @@ const ItemListContainer = () => {
 
     async function handleElements(url:string, request: IRequest) {
         console.log('REQUEST', request)
+        if (request.instant && request.method === 'PATCH') {
+            dispatch({method: request.method, payload: [request.item]});
+            return;
+        }
         const response = await sendLocalRequest(url, request.item, request.method);
         console.log('RESPONSE', response)
-        if (request.method === 'PATCH') dispatch({method: request.method, payload: [request.item]})
-        else {
-            response && dispatch({method: request.method, payload: [response]});
-            if (request.method !== 'DELETE')
-                globalDispatch(actions.setItemsAll({items: [response], page}));
-        }
+        if (request.item.type === 'page') return;
+        dispatch({method: request.method, payload: [response || request.item]});
+        if (request.method !== 'DELETE')
+            globalDispatch(actions.setItemsAll({items: [response], page}));
     }
 
     useEffect(() => {

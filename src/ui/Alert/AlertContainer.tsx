@@ -7,7 +7,7 @@ import {useAddEvent} from "../../hooks/useAddEvent";
 
 export type IAlertData = {
     type: "success" | "error" | "loader" | "warning" | "message",
-    body: string,
+    body?: string,
     timeout: number;
 }
 

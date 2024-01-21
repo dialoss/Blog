@@ -8,11 +8,10 @@
   width: 600px;
   height: 600px;
 
-  border-radius: 10px;
+  border-radius: 8px;
 
   overflow: hidden;
   margin: 0 auto;
-  box-shadow: 0 0 7px 0 grey;
   display: flex;
   background-color: $color-main;
   transition: all 0.3s linear;

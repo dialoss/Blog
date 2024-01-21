@@ -8,7 +8,7 @@ window.addEventListener('keydown', e => {
         e.target.nodeName == "TEXTAREA" ||
         e.target.isContentEditable ||
         window.modals.hasOpened() ||
-        !store.getState().elements.editPage) return;;
+        !store.getState().elements.editPage) return;
     if (e.ctrlKey) {
         switch (e.code) {
             case 'KeyZ':
@@ -20,12 +20,12 @@ window.addEventListener('keydown', e => {
             case 'KeyX':
                 return window.actions.cut();
             case 'KeyV':
-                return window.actions.request(window.actions.paste());
+                return window.actions.paste();
             case 'KeyQ':
                 return window.actions.history.clear();
         }
     }
     if (e.key === 'Delete') {
-        window.actions.request(window.actions.delete());
+        window.actions.delete();
     }
 })

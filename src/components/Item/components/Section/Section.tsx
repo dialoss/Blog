@@ -1,10 +1,8 @@
 //@ts-nocheck
-import React, {useCallback} from 'react';
+import React from 'react';
 
 const Section = ({data}) => {
-    return (
-        <div className={"item__section"}></div>
-    );
+    return (<></>);
 };
 
 export default Section;

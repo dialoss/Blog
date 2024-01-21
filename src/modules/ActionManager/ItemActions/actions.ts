@@ -63,13 +63,14 @@ export type IRequest = {
     method: "POST" | "PATCH" | "DELETE";
     endpoint: "items" | "pages";
     item: ItemElement | IPage;
+    instant: boolean;
 }
 
 interface IActions {
     itemlist: ItemlistManager;
     elements : ElementActions;
     history : HistoryManager;
-    request(method: string, items: ItemElement[] | ItemElement, endpoint: string);
+    request(method: string, items: ItemElement[] | ItemElement, endpoint: string, instant: boolean);
     update();
     delete();
     create();
@@ -84,7 +85,7 @@ export default class Actions implements IActions{
     history = new HistoryManager();
     itemlist = manager;
 
-    request(method: string, items: ItemElement[] | ItemElement, endpoint: string="items") {
+    request(method: string, items: ItemElement[] | ItemElement, endpoint: string="items", instant=false) {
         if (!Array.isArray(items)) items = [items];
         console.log(method, items, endpoint);
 
@@ -96,6 +97,7 @@ export default class Actions implements IActions{
                 method,
                 endpoint,
                 item,
+                instant,
             }
             this.itemlist.request(url, request);
             this.history.add(request);
@@ -104,14 +106,11 @@ export default class Actions implements IActions{
 
     create(item='') {
         let data = ActionData[item];
-        if (data.style) data.style = JSON.stringify({
-            css: JSON.stringify(data.style),
-        });
         if (!data) {
-            window.callbacks.call("element-form", getFormData("POST", this.elements.focused));
+            window.callbacks.call("element-form", getFormData("POST", {type: item}));
             return;
         }
-        let parent = this.elements.focused.type !== 'page' ? this.elements.focused.id : null;
+        let parent = this.elements.focused && (this.elements.focused.type !== 'page' ? this.elements.focused.id : null);
         this.request('POST', ({parent, ...data}));
     }
 
@@ -173,17 +172,17 @@ export default class Actions implements IActions{
         if (!elements.length) elements = [this.elements.focused];
         if (force) return this.request('DELETE', elements);
         window.callbacks.call("user-prompt", {title: "Подтвердить удаление", button: 'ок', submitCallback: (submit) => {
-            if (!!submit) {
-                this.request('DELETE', elements);
-            }
+            if (!!submit) this.request('DELETE', elements);
         }});
     }
 
     prepareItemForRequest(method: ('POST'|'DELETE'|'PATCH'), item: ItemElement={}) : ItemElement {
         let baseData = {};
         if (!item.id && method === "PATCH") baseData = this.elements.focused;
-        if (item.parent === undefined && method === "POST") item.parent = this.elements.focused.id;
-        if (item.style && typeof item.style !== 'string') item.style = JSON.stringify(item.style);
+        if (item.parent === undefined && method === "POST" && item.type !== 'page') item.parent = this.elements.focused.id;
+        if (item.style && typeof item.style !== 'string') item.style = JSON.stringify({
+            css: JSON.stringify(item.style),
+        });
         return {
             ...baseData,
             ...item,

@@ -10,8 +10,7 @@ export interface IAppStorage {
     listFiles(id: string) : Promise<StorageFile[]>;
     getFile(id: string) : Promise<StorageFile>;
     copy(id: string, dest: string);
-    move(file : StorageFile);
-    delete(files : StorageFile[]);
+    delete(file : StorageFile);
     uploadFile(file: File, path: string[], callback);
     getSpace(): Promise<StorageSpace>;
 }
@@ -40,19 +39,8 @@ export class AppStorage implements IAppStorage {
         return this.storageAPI.list(id);
     }
 
-    delete(files : StorageFile[]) {
-        return new Promise((resolve) => {
-            window.callbacks.call("user-prompt", {title: "Подтвердить удаление", button: 'ок', submitCallback: (submit) => {
-                    if (!!submit) {
-                        let removedFiles = [];
-                        for (const f of files) {
-                            removedFiles.push(this.storageAPI.delete(f));
-                        }
-                        Promise.all(removedFiles).then(data => resolve(data));
-                    }
-                    else resolve([]);
-                }});
-        });
+    delete(file : StorageFile) {
+        return this.storageAPI.delete(file);
     }
 
     async uploadFile(file: File, path: string[], callback) {
@@ -87,15 +75,12 @@ export class AppStorage implements IAppStorage {
     getFile(id: string) {
         return this.storageAPI.get(id)[0];
     }
-
     copy(id: string, dest: string) {
+        return this.storageAPI.copy({id, parents: [{id:dest}]});
     }
     update(file: StorageFile) {
         return this.storageAPI.update(file);
     }
-    move() {
-    }
-
     transferFiles(event, callback) {
         return Promise.all(FileTransfer.getFiles(event).map(f => {
             if (f.needUpload === undefined) return this.uploadFile(f, [], callback);

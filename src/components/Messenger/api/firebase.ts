@@ -139,6 +139,8 @@ export function useGetUsers() {
 
 }
 
+// user -> rooms -> room -> messages
+
 export function useGetRooms() {
     const {rooms_raw, user, users, room, rooms} = useAppSelector(state => state.messenger);
     useLayoutEffect(() => {

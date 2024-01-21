@@ -101,8 +101,7 @@ export class GoogleDriveAPI implements StorageAPI {
     }
 
     copy(file: StorageFile) {
-        let q = `?q='${file.parent || GoogleDrive.ROOT_FOLDER}'+in+parents`;
-        return this.request(GoogleDrive.BASE_URL + file.id + '/copy' + q);
+        return this.request(GoogleDrive.BASE_URL + file.id + '/copy', {method: "POST", body: file});
     }
 
     delete(file: StorageFile) {
@@ -188,6 +187,7 @@ export interface StorageFile {
 }
 
 export function serializeObject(file: object) : StorageFile {
+    if (!file.mimeType) return {};
     let mimeType = file.mimeType.split('.').slice(-1)[0];
     let props = (file.properties || []);
     let fileProps : MediaFileProps | ModelFileProps = {};

@@ -5,8 +5,6 @@ export function createCommentsTree(comments, sorting, search, limit=null) {
     let tree = {};
     let links = {};
     let searchPos = 0;
-    // console.log('newcom', newComments)
-    // console.log('search', search)
 
     newComments.forEach(c => {
         if (!search[searchPos]) return;

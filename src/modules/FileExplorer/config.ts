@@ -4,10 +4,11 @@ import prettyBytes from "pretty-bytes";
 import {UploadStatus} from "./api/google";
 import {createRoot} from "react-dom/client";
 import Tooltip from "./Tooltip";
-import {useAddEvent} from "../../hooks/useAddEvent";
 import React from "react";
 import {fileToItem} from "./helpers";
 import {IAlertData} from "../../ui/Alert/AlertContainer";
+import "./file-explorer/file-explorer.css";
+import "./file-explorer/file-explorer.js";
 
 declare global {
     interface Window {
@@ -67,7 +68,7 @@ function initLayout() {
 
 function updateStorageSpace() {
     storage.getSpace().then(d => {
-        const space = `Места занято: ${prettyBytes(d.used)} из ${prettyBytes(d.total)}`;
+        const space = `Занято: ${prettyBytes(d.used)} из ${prettyBytes(d.total)}`;
         window.filemanager.SetNamedStatusBarText('space', space);
     });
 }
@@ -121,7 +122,7 @@ export function init() {
             })
         },
         onrename: function(renamed, folder, entry, newname) {
-            storage.update(newname)
+            storage.update({id: entry.id, title: newname})
                 .then(data => renamed(...data))
                 .catch(er => renamed('Server/network error.'));
         },
@@ -135,22 +136,36 @@ export function init() {
                 .catch(() => created('Server/network error.'));
         },
         oncopy: function(copied, srcpath, srcids, destfolder) {
-            Promise.all(srcids.map(el => storage.copy({id: el, parent:destfolder.GetPathIDs().slice(-1)[0]}))).then(data => {
+            Promise.all(srcids.map(el => storage.copy(el, destfolder.GetPathIDs().slice(-1)[0]))).then(data => {
                     copied(true, data);
                     updateStorageSpace();
+                    options.onrefresh(destfolder);
                 }).catch(() => copied(false, 'Server/network error.'));
         },
-        ondelete: function(deleted, folder, ids, entries, recycle) {
-            Promise.resolve(storage.delete(ids.map(id => ({id})))).then(data => {
-                deleted(!!data.length);
-                options.onrefresh(folder);
-                updateStorageSpace();
-            }).catch(() => deleted('Server/network error.'))
+        ondelete: function(deleted, folder, ids, entries, recycle, force=false) {
+            function deleteFiles() {
+                Promise.all(ids.map(id => storage.delete({id}))).then(data => {
+                    deleted(!!data.length);
+                    options.onrefresh(folder);
+                    updateStorageSpace();
+                }).catch(() => deleted('Server/network error.'));
+            }
+            if (!force) {
+                window.callbacks.call("user-prompt", {
+                    title: "Подтвердить удаление", button: 'ок', submitCallback: (submit) => {
+                    if (!!submit) deleteFiles();
+                }});
+            } else {
+                deleteFiles();
+            }
         },
         onmove: function(moved, srcpath, srcids, destfolder) {
-            Promise.all(srcids.map(el => storage.copy({id: el, parent:destfolder.GetPathIDs().slice(-1)[0]}))).then(data => {
-                moved(true, data);
-            }).catch(() => moved(false, 'Server/network error.'));
+            options.oncopy((copied, data) => {
+                options.ondelete(() => {
+                    moved(true, data);
+                    options.onrefresh(destfolder);
+                }, srcpath, srcids, null, null, true);
+            }, srcpath, srcids, destfolder);
         },
         oninitupload: function(startupload, fileinfo) {
             if (fileinfo.type === 'dir') return;
@@ -195,7 +210,7 @@ export function init() {
         return files;
     }
 
-    window.filemanager.open = () => document.querySelector("#filemanager-local").click();
+    window.filemanager.local = () => document.querySelector("#filemanager-local").click();
 }
 
 function initTooltip() {

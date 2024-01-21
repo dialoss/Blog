@@ -1,5 +1,4 @@
 //@ts-nocheck
-import {offsetTop} from "./transform";
 
 function getFirstItems(container) {
     let items = container.querySelector('.items-wrapper');
@@ -20,6 +19,7 @@ function getMaxBottom(container) {
     if (container.style.aspectRatio !== 'auto') {
         return Math.max(m, container.getBoundingClientRect().height);
     }
+    // if (!isResizable(container)) m = Math.max(m, )
     // if (container.getAttribute('data-height')) {
     //     const dataHeight = +container.getAttribute('data-height').replace('px', '');
     //     if (dataHeight && m < dataHeight &&

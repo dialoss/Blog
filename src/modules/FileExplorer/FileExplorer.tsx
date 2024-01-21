@@ -1,7 +1,5 @@
 //@ts-nocheck
 import React, {useEffect, useState} from 'react';
-import "./file-explorer/file-explorer.css";
-import "./file-explorer/file-explorer";
 import {init, initItems} from "./config";
 import "./Custom.scss";
 import {getElementFromCursor, isMobileDevice, triggerEvent} from "../../helpers/events";

@@ -29,21 +29,7 @@ export interface TransformItemProps {
     id?: number;
 }
 
-const defaultStyle = {
-    // backgroundColor: "#fff",
-    aspectRatio: "auto",
-    boxShadow: "0 0 5px grey",
-    zIndex: 1,
-    resizable: true,
-    movable: true,
-    borderRadius: "8px",
-    padding: "0",
-};
-
-function getStyle(style, type) {
-    for (const s in defaultStyle) {
-        if (style[s] === undefined) style[s] = defaultStyle[s];
-    }
+function getStyle(style) {
     return {
         ...style,
         height: 'auto',
@@ -71,7 +57,7 @@ const Borders = ({type}) => {
     );
 }
 
-const Info = ({type}) => {
+const Info = ({info}) => {
     const [sizes, setSizes] = useState({width:0,height:0});
     const ref = useRef();
     useEffect(() => {
@@ -79,8 +65,8 @@ const Info = ({type}) => {
     }, []);
     return (
         <div className="info" ref={ref}>
-            <p className="name">{ItemsVerbose[type].text}</p>
-            {!!sizes.width && <p className="sizes">{Math.floor(sizes.width)}x{Math.floor(sizes.height)}</p>}
+            <p className="name">{ItemsVerbose[info.type].text} id: {info.id}</p>
+            {/*{!!sizes.width && <p className="sizes">{Math.floor(sizes.width)}x{Math.floor(sizes.height)}</p>}*/}
         </div>
     )
 }
@@ -108,13 +94,12 @@ const TransformItem = ({children, style, type, className, id} : TransformItemPro
                          data-id={id}
                          data-width={style.width}
                          data-height={style.height}
-                         style={getStyle(style, type)}
-        >
+                         style={getStyle(style)}>
             {children}
             {focused.id === id && <div className={"item__edit " + (focused.id === id ? 'focused' : '')}>
                 <Borders type={type}></Borders>
                 <Resizers></Resizers>
-                <Info type={type}></Info>
+                <Info info={{type, id}}></Info>
             </div>}
         </TransformButton>
     );

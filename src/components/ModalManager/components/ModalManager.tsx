@@ -86,7 +86,7 @@ class Modals implements IModals {
         }
     }
     hasOpened(): boolean {
-        return this.opened.length > 1;
+        return this.opened.length > 0;
     }
 }
 

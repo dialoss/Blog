@@ -1,8 +1,6 @@
 //@ts-nocheck
 import React, {useLayoutEffect, useState} from 'react';
 import Footer from "ui/Footer/Footer";
-import {getLocation} from "hooks/getLocation";
-import {sendLocalRequest} from "api/requests";
 import {useAppSelector} from "hooks/redux";
 import {request} from "../api/metrica";
 

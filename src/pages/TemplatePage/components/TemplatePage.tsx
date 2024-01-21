@@ -11,7 +11,7 @@ const TemplatePage = () => {
     return (
         <BrowserRouter>
             <ContentWrapper>
-                <NavbarContainer></NavbarContainer>
+                {/*<NavbarContainer></NavbarContainer>*/}
                 <div style={{minHeight: '100dvh'}}>
                     <AppRouter/>
                     <div style={{flexGrow: 1, minHeight:1}}></div>

@@ -37,13 +37,6 @@ const InfoParagraph = ({type, children, id, ...props}) => {
         setEditor({isOpened: false, value: text});
     }
 
-    useEffect(() => {
-        if (type === 'textfield') {
-            let cont = ref.current.closest(".transform-container");
-            triggerEvent("container:init", {container: cont});
-        }
-    }, [editor.isOpened]);
-
     return (
         <span ref={ref} {...props} key={type}
               onClick={openEditor}

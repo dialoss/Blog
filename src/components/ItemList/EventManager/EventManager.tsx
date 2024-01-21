@@ -71,6 +71,19 @@ const ItemInfo = ({data, children}) => {
     );
 }
 
+let interval = null;
+
+function setItemStyle(style) {
+    const item = window.actions.elements.focused;
+    if (!item || item.type === 'page') return;
+    if (interval) clearInterval(interval);
+    window.actions.request("PATCH", {...item, style}, 'items', true);
+    interval = setInterval(() => {
+        window.actions.request("PATCH", {...item, style});
+        clearInterval(interval);
+    }, 5000);
+}
+
 const EventManager = () => {
     function setEdit() {
         const current = store.getState().elements.editPage;
@@ -84,30 +97,25 @@ const EventManager = () => {
         }
     })
     function makeBackup() {
-        triggerEvent("alert:trigger", {
+        const id = window.alerts.open({
             type:'loader',
             timeout: 100000,
-        })
+        });
         sendLocalRequest('/api/backup/').then(r => {
-            triggerEvent("alert:close");
+            window.alerts.close(id);
             setTimeout(() => {
-                if (r.success) triggerEvent("alert:trigger", {
+                if (r.success) window.alerts.open({
                     type:'success',
                     body:'Дамп сохранен на почту',
                     timeout: 4000,
-                })
-                else triggerEvent("alert:trigger", {
+                });
+                else window.alerts.open({
                     type:'error',
                     body:"Ошибка сохранения",
                     timeout: 2000,
                 })
             }, 300);
         });
-    }
-    function setItemStyle(style) {
-        const item = window.actions.elements.focused;
-        if (!item) return;
-        window.actions.request("PATCH", {...item, style});
     }
     const elements = useAppSelector(state => state.elements);
     const item = elements.focused;
@@ -117,41 +125,8 @@ const EventManager = () => {
         <div className={'page-editor'} onMouseDown={e => e.stopPropagation()}>
             <div className="buttons">
                 <ActionButton modalToggle={false} onClick={makeBackup}><Backup></Backup></ActionButton>
-                <ActionButton modalToggle={false} onClick={setEdit}><Edit></Edit></ActionButton>
-            </div>
-
-            <div className="item__info">
-                <div className={"action-elements"}>
-                    <ItemsInfo items={[item]}
-                               type={"focused"}
-                               title={"Выделенный предмет " + (item.type ? ItemsVerbose[item.type].text : '')}></ItemsInfo>
-                    <ItemsInfo items={intermediate.filter(it => it.type === 'cut').map(it=>({id:it.item.id}))}
-                               type={"cutted"}
-                               title={"Вырезанные предметы"}></ItemsInfo>
-                    <ItemsInfo items={intermediate.filter(it => it.type === 'copy').map(it=>({id:it.item.id}))}
-                               type={"copied"}
-                               title={"Скопированные предметы"}></ItemsInfo>
-                    <Hierarchy data={Object.values(state)} config={{
-                        childSelector: "items",
-                        parentSelector: "parent",
-                        recursiveComponent: ItemInfo,
-                        componentDataProp: "data",
-                        accordion: true,
-                    }}></Hierarchy>
-                </div>
-            </div>
-            <div className="item__style">
-                <Slider togglers={[
-                    {
-                        element: <ToggleButton isOpened={true} width={40}>
-                            <IconChevronRight/>
-                        </ToggleButton>,
-                        action: 'toggle',
-                        callback: () => {}
-                    }
-                    ]}>
-                {item.id && <CSSEditor style={parse(item.style).editor || {}} setStyle={setItemStyle}></CSSEditor>}
-                </Slider>
+                <ActionButton memorizeState={true} modalToggle={false} onClick={setEdit}><Edit></Edit></ActionButton>
+                <p>{item.id}</p>
             </div>
         </div>
     );

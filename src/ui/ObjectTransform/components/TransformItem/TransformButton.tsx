@@ -7,7 +7,7 @@ const TransformButton = ({children, type, ...props}) => {
     useEffect(() => {
         let origin = ref.current;
         if (type === 'move' && !origin.classList.contains("transform-origin"))
-            origin = [...ref.current.querySelectorAll('.transform-origin')].slice(-1)[0];
+            origin = ref.current.querySelector('.transform-origin');
         origin && origin.addEventListener('mousedown', e => {
             if (e.button !== 0 || window.actions.elements.transformed) return;
             window.actions.elements.init(e, origin, type);

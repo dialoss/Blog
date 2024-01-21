@@ -11,13 +11,20 @@ const Slider = ({children, togglers, callback=null, defaultOpened=true}) => {
         setOpened(defaultOpened);
     }, [defaultOpened]);
 
+    const initialWidth = useState(0);
+
+    useEffect(() => {
+        console.log(ref.current.getBoundingClientRect().width)
+        initialWidth.current = ref.current.getBoundingClientRect().width;
+    }, []);
+
     useEffect(() => {
         if (callback) callback(isOpened);
-        document.documentElement.style.setProperty('--slider-width', ref.current.getBoundingClientRect().width + 'px');
+        // document.documentElement.style.setProperty('--slider-width', ref.current.getBoundingClientRect().width + 'px');
     }, [isOpened]);
-
+    console.log(initialWidth.current)
     return (
-        <div className={"slider " + state} ref={ref}>
+        <div className={"slider " + state} ref={ref} style={{width: isOpened ? (initialWidth.current || "auto") : 0}}>
             <div className={"slider__body"}>
                 {children}
                 <div className="slider__togglers">

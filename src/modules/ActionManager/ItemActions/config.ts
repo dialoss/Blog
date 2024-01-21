@@ -129,7 +129,7 @@ export const ContextActions : IContextAction = {
                 text: 'Хранилище',
             },
             'local': {
-                callback: () => window.filemanager.open(),
+                callback: () => window.filemanager.local(),
                 text: 'Локально',
             },
         }
@@ -160,25 +160,6 @@ interface IActionData {
 }
 
 export const ActionData: IActionData = {
-    quiz: {
-        type: "quiz",
-        data: {
-            url: "https://drive.google.com/uc?id=1Qzhf-dFfLhskhLvOC4toVvtOgA7bAM9U",
-        },
-        style: {
-            width: "500px",
-            aspectRatio: "1 / 1",
-        }
-    },
-    print: {
-        type: "print",
-        data: {
-            url: "https://view.genial.ly/6575ea77d853170013a7b268",
-        },
-        style: {
-            width: "1000px"
-        }
-    },
     section: {
         type: "section",
         style: {
@@ -206,7 +187,7 @@ export const ActionData: IActionData = {
     empty: {
         type: 'base',
         data: {
-            modifiers: "masonry_1"
+            class_name: "masonry masonry_1"
         },
         style: {
             movable: false,
