@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.cdc987c6.css",
+    "main.js": "/static/js/main.ee8c1b01.js",
+    "index.html": "/index.html",
+    "static/media/cross.svg": "/static/media/cross.3f2e479ea69c7ed744e8777bd8530c97.svg",
+    "static/media/attachment.svg": "/static/media/attachment.958e463b08f4452d196dc2839fb46c89.svg",
+    "static/media/fullscreen.svg": "/static/media/fullscreen.b4bebf7c0e56291d0dc5ec4bbfcec8c0.svg",
+    "static/media/message.svg": "/static/media/message.a497fae6716724b20fbdbfae50844419.svg",
+    "static/media/icon.svg": "/static/media/icon.c7780d523eb5c8161c3ca020724c8fd8.svg",
+    "static/media/send.svg": "/static/media/send.1ea23abc81008da8de3b6367eddb91e3.svg",
+    "static/media/columns.svg": "/static/media/columns.3f655a1b001e76c59222c3394812c9bd.svg",
+    "static/media/burger.svg": "/static/media/burger.63f8bb23192d6e12d3872cb695fd402e.svg",
+    "static/media/chevron-right.svg": "/static/media/chevron-right.715f8fa388f3e021e4e6720b1c99332e.svg",
+    "static/media/chevron-down.svg": "/static/media/chevron-down.f198fbdf10ebaca5ea27b8ab3ef8ea5c.svg",
+    "main.cdc987c6.css.map": "/static/css/main.cdc987c6.css.map",
+    "main.ee8c1b01.js.map": "/static/js/main.ee8c1b01.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.cdc987c6.css",
+    "static/js/main.ee8c1b01.js"
+  ]
+}
